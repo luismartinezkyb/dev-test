@@ -2,8 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //Components
 
-import Login from "./session/Login";
-import Error404 from "./errors/error404";
+import Login from "./session/Login.jsx";
+import Error404 from "./errors/Error404.jsx"
 //forbidden routes
 import Dashboard from './user/Dashboard.jsx';
 import EditProfile from './user/EditProfile.jsx';

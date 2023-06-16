@@ -1,6 +1,7 @@
 //imports
 import dotenv from 'dotenv'
 dotenv.config()
+import cors from 'cors';
 import express from 'express';
 import usersRoutes from './routes/users.js';
 import {createConnection} from './database/database.js';
@@ -15,6 +16,11 @@ const app = express();
 const port = process.env.APP_PORT || 3001;
 
 //middlewares
+app.use(cors({
+	origin:'*',
+	method: '*',
+	credentials: true,
+}));
 app.use(cookieParser());
 app.use(express.json());
 // app.use(cors({

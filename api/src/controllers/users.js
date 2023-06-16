@@ -48,6 +48,7 @@ const getUser=(req, res)=>{
 
         if(!getUser){
             res.status(404).json({message:'User not found'});
+            return;
         }
         res.json(getUser);
     } catch (error) {
@@ -84,7 +85,7 @@ const updateUser= async(req, res) => {
         const user = db.data.users.find(u=>u._id === id);
         
         if(!user){
-            res.json({message:'There is no users with the given id'});
+            return res.json({message:'There is no users with the given id'});
         }
         
         user.isActive=isActive;
@@ -105,11 +106,12 @@ const updateUser= async(req, res) => {
         
         res.json({
             message:'User updated successfully',
+            status: 'success',
             newUser: user,
         });
     } catch (error) {
         console.log(error)
-        return res.status(500).send({message:error.message})
+        handleHttpError(res, 'Something went wrong with login controller')
     }
 }
 const deleteUser= async(req, res) => {
@@ -122,6 +124,7 @@ const deleteUser= async(req, res) => {
 
         if(!user){
             res.json({message:'There is no users with the given id'});
+            return;
         }
 
         const newUser = db.data.users.filter(u => u._id !== id);
@@ -172,19 +175,14 @@ const loginUser= async(req, res) => {
     }
 }
 const checkUser= async(req, res, next) => {
-    
-    const token = req.cookies.jwt;
+
+    const {token} = req;
     
 
 	if (!token) {
         handleHttpError(res, "NO_TOKEN_IN_COOKIE", 401)
         return;
-		const dataToken = await verifyToken(token);
-        // //CHECA SI NO ES NULL
-        // if(!dataToken) {
-        //     handleHttpError(res, "NO_PAYLOAD_DATA", 401)
-        //     return;
-        // }
+		
 	}
     
     jwt.verify(
@@ -202,7 +200,7 @@ const checkUser= async(req, res, next) => {
                 res.json({status:false})
                 next();    
             }
-            res.json({status:true, user});
+            res.json({status:true, user, token});
         }
     })
 }

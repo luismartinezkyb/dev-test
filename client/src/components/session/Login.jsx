@@ -2,6 +2,7 @@ import { useCookies } from "react-cookie";
 import {useState, useEffect} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from 'axios';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import {ToastContainer, toast} from 'react-toastify'
 import styles from "../../style";
 import logo from "../../../../assets/logo.png";
@@ -11,6 +12,7 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [visible, setVisible] = useState(false)
     const generateError = (err) => toast.error(err, {
         position:"bottom-right",
     })
@@ -74,7 +76,7 @@ export default function Login() {
     
 
     return (
-        <div className={`h-screen flex items-center bg-tertiary justify-center w-screen `}>
+        <div className={`h-screen flex items-center bg-tertiary justify-center w-screen overflow-auto`}>
             <div className=' p-8 rounded-2xl bg-white w-[70%] sm:w-[60%]'>
                     <img src={logo} alt="logo" className="mx-auto w-[200px] h-[200px] object-contain" />
                     <p className={`${styles.sectionSubText}`}>WELCOME</p>
@@ -95,10 +97,12 @@ export default function Login() {
                     </label>
                     
                     <label htmlFor="password" className='flex flex-col'>
-                        <span className='text-black font-medium mb-4'>Your Password:</span>
+                        <span className='text-black font-medium mb-4 flex gap-2'>Your Password: {!visible?<FaEye size={30} onClick={()=>setVisible(!visible)}/>: <FaEyeSlash size={30} onClick={()=>setVisible(!visible)}/>}</span>
+                        
+                        
                         <input
                         name="password"
-                        type="password" 
+                        type={visible?'text':'password'} 
                         required
                         placeholder="Insert your password here" 
                         value={password} 
@@ -106,9 +110,10 @@ export default function Login() {
                         className='bg-slate-600 py-4 px-6 placeholder:text-secondary text-white rounded-lg outlined-none border-none font-medium' 
                         />
                         
+                        
+                        
                     </label>
-                    <span>{}</span>
-
+                    
                     
                     <button 
                         type='submit'
